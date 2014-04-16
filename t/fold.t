@@ -74,7 +74,7 @@ use Test::More;
 # on_seen: trigger the circular reference callback (hashref)
 {
     my @seen;
-    my $on_seen= sub { isa_ok $_[0], 'Hash::Fold'; push @seen, $_[1] };
+    my $on_seen = sub { isa_ok $_[0], 'Hash::Fold'; push @seen, $_[1] };
     my $folder = Hash::Fold->new(on_seen => $on_seen);
     my $circular = { self => undef };
 
@@ -108,7 +108,7 @@ use Test::More;
 # on_seen: trigger the circular reference callback (arrayref)
 {
     my @seen;
-    my $on_seen= sub { isa_ok $_[0], 'Hash::Fold'; push @seen, $_[1] };
+    my $on_seen = sub { isa_ok $_[0], 'Hash::Fold'; push @seen, $_[1] };
     my $folder = Hash::Fold->new(on_seen => $on_seen);
     my $circular = [ undef ];
 
@@ -126,9 +126,7 @@ use Test::More;
 
     my $got = $folder->fold($hash);
     is_deeply $got, $want;
-    is_deeply \@seen [ $circular, $circular ];
-    is $seen[0], $circular; # same ref
-    is $seen[1], $circular; # same ref
+    is_deeply \@seen, [ $circular, $circular ];
     is_deeply $folder->unfold($got), $hash; # roundtrip
 }
 

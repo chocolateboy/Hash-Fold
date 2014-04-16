@@ -1,5 +1,8 @@
 Revision history for Hash-Fold
 
-0.0.1 Tue Apr 15 15:15:53 2014
+0.0.2 Wed Apr 16 10:21:05 2014
+    - fix test typo that was causing OOM errors
+    - doc fixlets
 
-    - First version, released on an unsuspecting world.
+0.0.1 Tue Apr 15 15:15:53 2014
+    - initial release

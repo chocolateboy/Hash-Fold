@@ -5,7 +5,7 @@ use Moose;
 use Scalar::Util qw(refaddr);
 
 use Sub::Exporter -setup => {
-    exports => [ map { $_ => \&_build_function } qw(fold unfold flatten unflatten) ],
+    exports => [ map { $_ => \&_build_export } qw(fold unfold flatten unflatten) ],
 };
 
 use constant {
@@ -15,7 +15,7 @@ use constant {
     VALUE => 1,
 };
 
-our $VERSION = '0.0.1';
+our $VERSION = '0.0.2';
 
 has on_object => (
     isa      => 'CodeRef',
@@ -41,7 +41,6 @@ has array_delimiter => (
     default  => '.',
 );
 
-# TODO provide flatten and unflatten as synonyms
 sub fold {
     my ($self, $value) = @_;
     my $ref = ref($value);
@@ -59,7 +58,6 @@ sub fold {
     }
 }
 
-# TODO provide flatten and unflatten as synonyms
 sub unfold {
     my ($self, $hash) = @_;
     my $ref = ref($hash);
@@ -94,7 +92,7 @@ sub is_object {
     return $ref && ($ref ne 'HASH') && ($ref ne 'ARRAY');
 }
 
-sub _build_function {
+sub _build_export {
     my ($class, $name, $base_options) = @_;
 
     return sub ($;@) {
@@ -158,8 +156,7 @@ sub _split {
 
         if ($same_delimiter) {
             # tie-breaker
-            # if ($step =~ /^\d+$/) {
-            if (($step eq '0') || ($step =~ /^[1-9]\d*$/)) { # no leading space
+            if (($step eq '0') || ($step =~ /^[1-9]\d*$/)) { # no leading 0
                 push @steps, [ ARRAY, $step ];
             } else {
                 push @steps, [ HASH, $step ];
@@ -247,13 +244,13 @@ sub _merge {
 #     3 (or more): e.g. [ 'foo', 42, 'bar' ]:
 #
 #        $context = $context->{foo} ||= []
-#        return $self->_set($context, $new_steps, $value)
+#        return $self->_set($context, [ 42, 'bar' ], $value)
 #
 # Note that the 2 case can be implemented in the same way as the 3 (or more) case.
 
 sub _set {
     my ($self, $context, $steps, $value) = @_;
-    my $step = shift @$steps; # or die "WTF" (shouldn't happen)
+    my $step = shift @$steps;
 
     if (@$steps) { # recursive case
         # peek i.e. look-ahead to the step that will be processed in
@@ -281,7 +278,7 @@ __PACKAGE__->meta->make_immutable;
 
 =head1 NAME
 
-Hash::Fold - fold and unfold nested hashrefs
+Hash::Fold - flatten and unflatten nested hashrefs
 
 =head1 SYNOPSIS
 
@@ -297,8 +294,6 @@ Hash::Fold - fold and unfold nested hashrefs
     };
 
     my $flattened = flatten($nested);
-    my $roundtrip = unflatten($flattened);
-
     is_deeply $flattened, {
         'baz.a'     => 'b',
         'baz.c.0'   => 'd',
@@ -307,11 +302,13 @@ Hash::Fold - fold and unfold nested hashrefs
         'foo'       => $object,
     };
 
+    my $roundtrip = unflatten($flattened);
     is_deeply $roundtrip, $nested;
 
 =head1 DESCRIPTION
 
-This module provides functional and OO interfaces that can be used to flatten and unflatten hashrefs.
+This module provides functional and OO interfaces which allow hashrefs containing nested
+values to be flattened into single-level hashrefs (e.g. with dotted keys) and unflattened.
 
 =head1 EXPORTS
 
@@ -322,7 +319,7 @@ Nothing by default. The following functions can be imported.
 Takes a nested hashref and returns a single-level hashref with (by default) dotted keys.
 
 Unblessed arrayrefs and unblessed hashrefs are traversed. All other values
-(e.g. strings, numbers, objects &c.) are treated as terminals and passed through verbatim.
+(e.g. strings, regexps, objects &c.) are treated as terminals and passed through verbatim.
 
 =head2 fold
 
@@ -338,15 +335,15 @@ Provided as an alias for L<"unflatten">.
 
 =head1 VERSION
 
-0.0.1
+0.0.2
 
 =head1 SEE ALSO
 
 =over
 
-=item L<CGI::Expand>
+=item * L<CGI::Expand>
 
-=item L<Hash::Flatten>
+=item * L<Hash::Flatten>
 
 =back
 

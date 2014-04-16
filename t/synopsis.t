@@ -18,8 +18,6 @@ use Test::More tests => 4;
     };
 
     my $flattened = flatten($nested);
-    my $roundtrip = unflatten($flattened);
-
     is_deeply $flattened, {
         'baz.a'     => 'b',
         'baz.c.0'   => 'd',
@@ -28,6 +26,7 @@ use Test::More tests => 4;
         'foo'       => $object,
     };
 
+    my $roundtrip = unflatten($flattened);
     is_deeply $roundtrip, $nested;
 }
 
