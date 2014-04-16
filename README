@@ -1,0 +1,29 @@
+Hash-Fiold version 0.0.1
+===========================
+
+This module provides functional and OO interfaces that can be used to flatten and
+unflatten nested hashrefs.
+
+INSTALLATION
+
+To install this module type the following:
+
+   perl Makefile.PL
+   make
+   make test
+   make install
+
+DEPENDENCIES
+
+This module requires these other modules and libraries:
+
+    Moose
+    Sub::Exporter
+
+COPYRIGHT AND LICENCE
+
+Copyright (C) 2014 by chocolateboy
+
+This library is free software; you can redistribute it and/or modify
+it under the same terms as Perl itself, either Perl version 5.16.0 or,
+at your option, any later version of Perl 5 you may have available.
