@@ -90,7 +90,7 @@ sub folds_ok {
     is $seen, 0;
 }
 
-# on_seen: trigger the circular reference callback (hashref)
+# on_cycle: trigger the circular reference callback (hashref)
 {
     my @seen;
     my $on_cycle = sub { isa_ok $_[0], 'Hash::Fold'; push @seen, $_[1] };
@@ -114,7 +114,7 @@ sub folds_ok {
     is $seen[1], $circular; # same ref
 }
 
-# on_seen: trigger the circular reference callback (arrayref)
+# on_cycle: trigger the circular reference callback (arrayref)
 {
     my @seen;
     my $on_cycle = sub { isa_ok $_[0], 'Hash::Fold'; push @seen, $_[1] };
