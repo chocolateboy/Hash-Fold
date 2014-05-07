@@ -3,6 +3,7 @@ Revision history for Hash-Fold
 0.1.0 Wed May 7 12:40:38 2014
     - fix bug that prevented empty arrayrefs and hashrefs being serialised
     - add merge method/function
+    - rename on_seen -> on_cycle
     - document options/attributes and OO/functional usage
     - rm redundant (for now) t/unfold.t
 
