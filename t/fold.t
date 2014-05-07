@@ -3,12 +3,35 @@
 use strict;
 use warnings;
 
-use Hash::Fold qw(fold);
+use Data::Dumper qw(Dumper);
+use Hash::Fold qw(fold unfold);
+use Storable qw(dclone);
 use Test::More;
+
+sub folds_ok {
+    my $hash = shift;
+    my $want = shift;
+    my $options = @_ == 1 ? shift : { @_ };
+
+    local ($Data::Dumper::Terse, $Data::Dumper::Indent, $Data::Dumper::Sortkeys) = (1, 1, 1);
+
+    # report errors with the caller's line number
+    local $Test::Builder::Level = $Test::Builder::Level + 1;
+
+    my $got = fold($hash, $options);
+
+    unless (is_deeply($got, $want)) {
+        warn 'got: ', Dumper($got), $/;
+        warn 'want: ', Dumper($got), $/;
+    }
+
+    isnt $got, $want, 'different refs';
+    is_deeply unfold($got, $options), $hash, 'roundtrip: unfold(fold(hash)) == hash';
+    return $got;
+}
 
 # exercise a bit of everything to make sure the basics work
 {
-    my $folder = Hash::Fold->new;
     my $object = bless {};
     my $regex  = qr{whatever};
     my $glob   = \*STDIN;
@@ -42,9 +65,7 @@ use Test::More;
         'foo.bar.string'           => 'Hello, world!'
     };
 
-    my $got = $folder->fold($hash);
-    is_deeply $folder->unfold($got), $hash; # roundtrip
-    is_deeply $got, $want;
+    folds_ok $hash => $want;
 }
 
 # seeing a value more than once is not the same thing as seeing a value inside itself
@@ -52,7 +73,7 @@ use Test::More;
 # with the latter
 {
     my $seen   = 0;
-    my $folder = Hash::Fold->new(on_seen => sub { $seen = 1 });
+    my $on_cycle = sub { $seen = 1 };
     my $object = bless {};
 
     my $hash = {
@@ -65,17 +86,14 @@ use Test::More;
         'c.d' => $object,
     };
 
-    my $got = $folder->fold($hash);
-    is_deeply $got, $want;
-    is_deeply $folder->unfold($got), $hash; # roundtrip
+    folds_ok $hash => $want, on_cycle => $on_cycle;
     is $seen, 0;
 }
 
 # on_seen: trigger the circular reference callback (hashref)
 {
     my @seen;
-    my $on_seen = sub { isa_ok $_[0], 'Hash::Fold'; push @seen, $_[1] };
-    my $folder = Hash::Fold->new(on_seen => $on_seen);
+    my $on_cycle = sub { isa_ok $_[0], 'Hash::Fold'; push @seen, $_[1] };
     my $circular = { self => undef };
 
     $circular->{self} = $circular;
@@ -90,26 +108,16 @@ use Test::More;
         'c.d.self' => $circular,
     };
 
-    my $got = $folder->fold($hash);
-    is_deeply $got, $want;
-
-    # FIXME this causes an "Out of memory!" error in perl 5.14.2,
-    # but works fine (with the same version of Test::More
-    # (and Scalar::Util)) in 5.16.0
-    # is_deeply \@seen [ $circular, $circular ];
-
-    is scalar(@seen), 2;
+    folds_ok $hash => $want, on_cycle => $on_cycle;
+    is_deeply \@seen, [ $circular, $circular ];
     is $seen[0], $circular; # same ref
     is $seen[1], $circular; # same ref
-
-    is_deeply $folder->unfold($got), $hash; # roundtrip
 }
 
 # on_seen: trigger the circular reference callback (arrayref)
 {
     my @seen;
-    my $on_seen = sub { isa_ok $_[0], 'Hash::Fold'; push @seen, $_[1] };
-    my $folder = Hash::Fold->new(on_seen => $on_seen);
+    my $on_cycle = sub { isa_ok $_[0], 'Hash::Fold'; push @seen, $_[1] };
     my $circular = [ undef ];
 
     $circular->[0] = $circular;
@@ -124,10 +132,8 @@ use Test::More;
         'c.d.0' => $circular,
     };
 
-    my $got = $folder->fold($hash);
-    is_deeply $got, $want;
+    folds_ok $hash => $want, on_cycle => $on_cycle;
     is_deeply \@seen, [ $circular, $circular ];
-    is_deeply $folder->unfold($got), $hash; # roundtrip
 }
 
 # on_object: trigger the on_object type for a Regexp, a GLOB, and a blessed object
@@ -135,13 +141,12 @@ use Test::More;
     my @on_object;
 
     my $on_object = sub {
-        my ($folder, $object) = @_;
+        my ($folder, $value) = @_;
         isa_ok $folder, 'Hash::Fold';
         push @on_object, $_[1];
-        return $object;
+        return $value;
     };
 
-    my $folder = Hash::Fold->new(on_object => $on_object);
     my $regexp = qr{foo};
     my $glob = \*STDIN;
     my $object = bless {};
@@ -163,25 +168,23 @@ use Test::More;
         'f.h' => 'Hello, world!'
     };
 
-    my $got = $folder->fold($hash);
-    is_deeply $got, $want;
+    folds_ok $hash => $want, on_object => $on_object;
     is_deeply \@on_object, [ $regexp, $glob, $object ];
-    is_deeply $folder->unfold($got), $hash; # roundtrip
 }
 
-# on_object: trigger the on_object type for a terminal and turn it into a non-terminal
+# on_object: trigger the on_object callback for an object and turn it into a non-terminal
 {
-    my $expand_object = sub {
-        my ($folder, $object) = @_;
+    my $expand_terminal = sub {
+        my ($folder, $value) = @_;
         isa_ok $folder, 'Hash::Fold';
-        isa_ok $object, __PACKAGE__;
-        my $expanded = { %$object };
+        isa_ok $value, __PACKAGE__;
+        my $expanded = { %$value };
         return $expanded;
     };
 
     my $folder_without_expand = Hash::Fold->new();
-    my $folder_with_expand = Hash::Fold->new(on_object => $expand_object);
-    my $object = bless { one => { two => [ qw(three four five) ] } };
+    my $folder_with_expand = Hash::Fold->new(on_object => $expand_terminal);
+    my $object = bless { foo => 'bar', baz => 'quux' };
 
     my $hash = {
         a => $object,
@@ -194,10 +197,9 @@ use Test::More;
     };
 
     my $want_with_expand = {
-        'a.one.two.0' => 'three',
-        'a.one.two.1' => 'four',
-        'a.one.two.2' => 'five',
-        'b'           => 42
+        'a.foo' => 'bar',
+        'a.baz' => 'quux',
+        'b'     => 42
     };
 
     my $got_without_expand = $folder_without_expand->fold($hash);
@@ -211,21 +213,19 @@ use Test::More;
     is_deeply $folder_with_expand->unfold($got_with_expand), $hash; # roundtrip
 }
 
-# on_object: combine object expansion with the circular-reference check i.e.
-# if we convert an object into an unblessed hashref, we should detect a
+# on_object: combine terminal expansion with the circular-reference check i.e.
+# if we convert a terminal into an unblessed hashref, we should detect a
 # circular reference in that hashref. check that the nested self-reference
 # is detected and returned as a terminal
 {
-    my $expand_object = sub {
-        my ($folder, $object) = @_;
+    my $expand_terminal = sub {
+        my ($folder, $value) = @_;
         isa_ok $folder, 'Hash::Fold';
-        isa_ok $object, __PACKAGE__;
-        my $expanded = { %$object };
+        isa_ok $value, __PACKAGE__;
+        my $expanded = { %$value };
         $expanded->{self} = $expanded;
         return $expanded;
     };
-
-    my $folder = Hash::Fold->new(on_object => $expand_object);
 
     my $expanded = {
         foo => { bar => 'baz' },
@@ -244,9 +244,28 @@ use Test::More;
         'b'         => 42
     };
 
-    my $got = $folder->fold($hash);
-    is_deeply $got, $want;
-    is_deeply $folder->unfold($got), $hash; # roundtrip
+    folds_ok $hash => $want, on_object => $expand_terminal;
+}
+
+# squashed bug: make sure empty arrays and hashes are handled correctly
+# (i.e. not removed!)
+{
+    my $hash = {
+        array => [ [], {} ],
+        hash  => {
+            array => [],
+            hash  => {}
+        }
+    };
+
+    my $want = {
+        'array.0'    => [],
+        'array.1'    => {},
+        'hash.array' => [],
+        'hash.hash'  => {},
+    };
+
+    folds_ok $hash => $want;
 }
 
 done_testing;

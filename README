@@ -1,7 +1,7 @@
-Hash-Fold version 0.0.2
+Hash-Fold version 0.1.0
 ===========================
 
-This module provides functional and OO interfaces which allow hashrefs containing nested values to be flattened into single-level hashrefs (e.g. with dotted keys) and unflattened.
+This module provides functional and OO interfaces which can be used to flatten, unflatten and merge nested hashrefs.
 
 INSTALLATION
 
