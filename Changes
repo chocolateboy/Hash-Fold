@@ -1,5 +1,8 @@
 Revision history for Hash-Fold
 
+0.1.1 Mon May 12 11:31:04 2014
+    - doc cleanup: separate types/signatures from POD headers
+
 0.1.0 Wed May 7 12:40:38 2014
     - fix bug that prevented empty arrayrefs and hashrefs being serialised
     - add merge method/function

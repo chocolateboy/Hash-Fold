@@ -1,4 +1,4 @@
-Hash-Fold version 0.1.0
+Hash-Fold version 0.1.1
 ===========================
 
 This module provides functional and OO interfaces which can be used to flatten, unflatten and merge nested hashrefs.
