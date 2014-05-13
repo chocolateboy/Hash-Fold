@@ -369,7 +369,7 @@ This module provides functional and OO interfaces which can be used to flatten, 
 and merge nested hashrefs.
 
 Unless noted, the functions listed below are also available as methods. Options provided to the
-C<Hash::Fold> constructor can be supplied to the functions e.g.:
+Hash::Fold constructor can be supplied to the functions e.g.:
 
     use Hash::Fold;
 
@@ -389,7 +389,7 @@ following are equivalent:
     my $folded = fold($hash,   delimiter => '/'  );
     my $folded = fold($hash, { delimiter => '/' });
 
-In addition, C<Hash::Fold> uses L<Sub::Exporter>, which allows functions to bake
+In addition, Hash::Fold uses L<Sub::Exporter>, which allows functions to bake
 in options on import e.g.:
 
     use Hash::Fold fold => { delimiter => '/' };
@@ -404,15 +404,15 @@ and overridden like any other attributes.
 
 =head2 array_delimiter
 
-B<Type>: Str, ro
+B<Type>: Str, ro, default: "."
 
-The delimiter prefixed to array elements when flattening and unflattening. Default: C<.>.
+The delimiter prefixed to array elements when flattening and unflattening.
 
 =head2 hash_delimiter
 
-B<Type>: Str, ro
+B<Type>: Str, ro, default: "."
 
-The delimiter prefixed to hash elements when flattening and unflattening. Default: C<.>.
+The delimiter prefixed to hash elements when flattening and unflattening.
 
 =head2 delimiter
 
@@ -420,16 +420,16 @@ B<Type>: Str
 
 This is effectively a write-only attribute which assigns the same string to L<"array_delimiter"> and
 L<"hash_delimiter">. It can only be supplied as a constructor arg or function option (which are
-equivalent) i.e. C<Hash::Fold> instances have no C<delimiter> method.
+equivalent) i.e. Hash::Fold instances have no C<delimiter> method.
 
 =head2 on_cycle
 
-B<Type>: (C<Hash::Fold>, Ref) -> None, ro
+B<Type>: (Hash::Fold, Ref) -> None, ro
 
 A callback invoked whenever L<"fold"> encounters a circular reference i.e. a reference which contains
 itself as a nested value.
 
-The callback takes two arguments: the C<Hash::Fold> instance and the value e.g.:
+The callback takes two arguments: the Hash::Fold instance and the value e.g.:
 
     sub on_cycle {
         my ($folder, $value) = @_;
@@ -445,14 +445,14 @@ The default callback does nothing.
 
 =head2 on_object
 
-B<Type>: (C<Hash::Fold>, Ref) -> Any, ro
+B<Type>: (Hash::Fold, Ref) -> Any, ro
 
 A callback invoked whenever L<"fold"> encounters a value for which the L<"is_object"> method returns true
 i.e. any reference that isn't an unblessed arrayref or unblessed hashref. This callback can be used to modify
 the value e.g. to return a traversable value (e.g. unblessed hashref) in place of a terminal (e.g.
 blessed hashref).
 
-The callback takes two arguments: the C<Hash::Fold> instance and the object e.g.:
+The callback takes two arguments: the Hash::Fold instance and the object e.g.:
 
     use Scalar::Util qw(blessed);
 
