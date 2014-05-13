@@ -389,8 +389,8 @@ following are equivalent:
     my $folded = fold($hash,   delimiter => '/'  );
     my $folded = fold($hash, { delimiter => '/' });
 
-In addition, Hash::Fold uses L<Sub::Exporter>, which allows functions to bake
-in options on import e.g.:
+In addition, Hash::Fold uses L<Sub::Exporter>, which allows functions to be imported with options
+baked in e.g.:
 
     use Hash::Fold fold => { delimiter => '/' };
 
