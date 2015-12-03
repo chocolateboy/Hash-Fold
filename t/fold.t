@@ -275,4 +275,41 @@ sub folds_ok {
     folds_ok $hash => $want;
 }
 
+# Noted potential failure in code
+{
+    my $hash = {
+        foo => 'bar',
+        1   => 'aaagh!',
+        baz => 'quux',
+    };
+
+    my $want = {
+        'foo'    => 'bar',
+        '1'      => 'aaagh!',
+        'baz'    => 'quux',
+    };
+
+    folds_ok $hash => $want;
+}
+
+# Failing extension of noted potential failure in code
+TODO: {
+    my $hash = {
+        bar => {
+            foo => 'bar',
+            1   => 'aaagh!',
+            baz => 'quux',
+        }
+    };
+
+    my $want = {
+        'bar.foo'    => 'bar',
+        'bar.1'      => 'aaagh!',
+        'bar.baz'    => 'quux',
+    };
+
+    local $TODO = "Array/hash ambiguity not resolved correctly at the moment";
+    folds_ok $hash => $want;
+}
+
 done_testing;
