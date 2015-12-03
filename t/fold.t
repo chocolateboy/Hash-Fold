@@ -18,15 +18,22 @@ sub folds_ok {
     # report errors with the caller's line number
     local $Test::Builder::Level = $Test::Builder::Level + 1;
 
-    my $got = fold($hash, $options);
+    my $got;
+    eval {
+        $got = fold($hash, $options);
 
-    unless (is_deeply($got, $want)) {
-        warn 'got: ', Dumper($got), $/;
-        warn 'want: ', Dumper($got), $/;
-    }
+        unless (is_deeply($got, $want)) {
+            warn 'got: ', Dumper($got), $/;
+            warn 'want: ', Dumper($got), $/;
+        }
 
-    isnt $got, $want, 'different refs';
-    is_deeply unfold($got, $options), $hash, 'roundtrip: unfold(fold(hash)) == hash';
+        isnt $got, $want, 'different refs';
+        is_deeply unfold($got, $options), $hash, 'roundtrip: unfold(fold(hash)) == hash';
+    };
+
+    ok !$@, 'no exception raised'
+        or diag "Exception: $@";
+
     return $got;
 }
 
