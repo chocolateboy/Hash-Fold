@@ -189,7 +189,10 @@ sub _split {
     my $hash_delimiter_pattern = quotemeta($hash_delimiter);
     my $array_delimiter_pattern = quotemeta($array_delimiter);
     my $same_delimiter = $array_delimiter eq $hash_delimiter;
-    my @split = split qr{((?:$hash_delimiter_pattern)|(?:$array_delimiter_pattern))}, $path;
+    my $split_pattern = length($hash_delimiter) >= length($array_delimiter)
+        ? qr{((?:$hash_delimiter_pattern)|(?:$array_delimiter_pattern))}
+        : qr{((?:$array_delimiter_pattern)|(?:$hash_delimiter_pattern))};
+    my @split = split $split_pattern, $path;
     my @steps;
 
     # since we require the argument to fold (and unfold) to be a hashref,
