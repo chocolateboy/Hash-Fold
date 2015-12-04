@@ -18,7 +18,7 @@ use constant {
     VALUE => 1,
 };
 
-our $VERSION = '0.1.1';
+our $VERSION = '0.1.2';
 
 has on_object => (
     isa      => 'CodeRef',
@@ -562,7 +562,7 @@ values (i.e. unblessed hashrefs, unblessed arrayrefs, and non-references).
 
 =head1 VERSION
 
-0.1.1
+0.1.2
 
 =head1 SEE ALSO
 
@@ -584,7 +584,7 @@ chocolateboy <chocolate@cpan.org>
 
 =head1 COPYRIGHT
 
-Copyright (c) 2014, chocolateboy.
+Copyright (c) 2014-2015, chocolateboy.
 
 This module is free software. It may be used, redistributed and/or modified
 under the same terms as Perl itself.

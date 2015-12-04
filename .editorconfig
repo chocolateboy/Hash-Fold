@@ -9,7 +9,7 @@ end_of_line = lf
 insert_final_newline = true
 trim_trailing_whitespaces = true
 
-[*.{pl,pod,pm,t}]
+[*.{pl,PL,pod,pm,t}]
 indent_size = 4
 indent_style = space
 max_line_length = 80
