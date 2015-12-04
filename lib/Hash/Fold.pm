@@ -51,8 +51,11 @@ around BUILDARGS => sub {
     my $delimiter = delete $args->{delimiter};
 
     if (defined $delimiter) {
-        $args->{array_delimiter} = $delimiter unless (exists $args->{array_delimiter});
-        $args->{hash_delimiter}  = $delimiter unless (exists $args->{hash_delimiter});
+        $args->{array_delimiter} = $delimiter
+            unless (exists $args->{array_delimiter});
+
+        $args->{hash_delimiter}  = $delimiter
+            unless (exists $args->{hash_delimiter});
     }
 
     return $args;
@@ -157,7 +160,8 @@ sub _join {
 
 =begin comment
 
-TODO: when the hash delimiter is the same as the array delimiter (as it is by default), ambiguities can arise:
+TODO: when the hash delimiter is the same as the array delimiter
+(as it is by default), ambiguities can arise:
 
     {
         foo => 'bar',
@@ -165,16 +169,16 @@ TODO: when the hash delimiter is the same as the array delimiter (as it is by de
         baz => 'quux',
     }
 
-In many cases, these can be smartly resolved by looking at the context: if at least one step
-is non-numeric, then the container must be a hashref:
+In many cases, these can be smartly resolved by looking at the context: if
+at least one step is non-numeric, then the container must be a hashref:
 
     foo.bar.baz
     foo.bar.0   <- must be a hash key
     foo.bar.quux
 
-The ambiguity can either be resolved here/in unfold with a bit of static analysis or resolved
-lazily/dynamically in _set (need to sort the keys so that non-integers (if any) are unpacked
-before integers (if any)).
+The ambiguity can either be resolved here/in unfold with a bit of static
+analysis or resolved lazily/dynamically in _set (need to sort the keys so
+that non-integers (if any) are unpacked before integers (if any)).
 
 Currently, the example above is unpacked correctly :-)
 
@@ -227,12 +231,15 @@ sub _merge {
     my ($self, $value, $target_key, $target, $_seen) = @_;
 
     # "localize" the $seen hash: we want to catch circular references (i.e.
-    # an unblessed hashref or arrayref which contains (at some depth) a reference to itself),
-    # but don't want to prevent repeated references e.g. { foo => $object, bar => $object }
-    # is OK. To achieve this, we need to "localize" the $seen hash i.e. do
-    # the equivalent of "local $seen". However, perl doesn't allow lexical variables
-    # to be localized, so we have to do it manually.
-    my $seen = { %$_seen }; # isolate from the caller's $seen hash and allow scoped additions
+    # an unblessed hashref or arrayref which contains (at some depth) a
+    # reference to itself), but don't want to prevent repeated references
+    # e.g. { foo => $object, bar => $object } is OK. To achieve this, we need
+    # to "localize" the $seen hash i.e. do the equivalent of "local $seen".
+    # However, perl doesn't allow lexical variables to be localized, so we have
+    # to do it manually.
+
+    # isolate from the caller's $seen hash and allow scoped additions
+    my $seen = { %$_seen };
 
     if ($self->is_object($value)) {
         $value = $self->on_object->($self, $value);
@@ -263,7 +270,11 @@ sub _merge {
             # tests
             for my $hash_key (sort keys %$value) {
                 my $hash_value = $value->{$hash_key};
-                $self->_merge($hash_value, $self->_join($target_key, $delimiter, $hash_key), $target, $seen);
+                $self->_merge(
+                    $hash_value,
+                    $self->_join($target_key, $delimiter, $hash_key),
+                    $target, $seen
+                );
             }
         } else {
             $target->{$target_key} = {};
@@ -276,7 +287,12 @@ sub _merge {
         if (@$value) {
             for my $index (0 .. $#$value) {
                 my $array_element = $value->[$index];
-                $self->_merge($array_element, $self->_join($target_key, $delimiter, $index), $target, $seen);
+
+                $self->_merge(
+                    $array_element,
+                    $self->_join($target_key, $delimiter, $index),
+                    $target, $seen
+                );
             }
         } else {
             $target->{$target_key} = [];
@@ -304,7 +320,8 @@ sub _merge {
 #        $context = $context->{foo} ||= []
 #        return $self->_set($context, [ 42, 'bar' ], $value)
 #
-# Note that the 2 case can be implemented in the same way as the 3 (or more) case.
+# Note that the 2 case can be implemented in the same way as the 3
+# (or more) case.
 
 sub _set {
     my ($self, $context, $steps, $value) = @_;
@@ -368,11 +385,11 @@ Hash::Fold - flatten and unflatten nested hashrefs
 
 =head1 DESCRIPTION
 
-This module provides functional and OO interfaces which can be used to flatten, unflatten
-and merge nested hashrefs.
+This module provides functional and OO interfaces which can be used to flatten,
+unflatten and merge nested hashrefs.
 
-Unless noted, the functions listed below are also available as methods. Options provided to the
-Hash::Fold constructor can be supplied to the functions e.g.:
+Unless noted, the functions listed below are also available as methods. Options
+provided to the Hash::Fold constructor can be supplied to the functions e.g.:
 
     use Hash::Fold;
 
@@ -386,14 +403,14 @@ is equivalent to:
 
     my $folded = fold($hash, delimiter => '/');
 
-Options (and constructor args) can be supplied as a list of key/value pairs or a hashref, so the
-following are equivalent:
+Options (and constructor args) can be supplied as a list of key/value pairs or
+a hashref, so the following are equivalent:
 
     my $folded = fold($hash,   delimiter => '/'  );
     my $folded = fold($hash, { delimiter => '/' });
 
-In addition, Hash::Fold uses L<Sub::Exporter>, which allows functions to be imported with options
-baked in e.g.:
+In addition, Hash::Fold uses L<Sub::Exporter>, which allows functions to be
+imported with options baked in e.g.:
 
     use Hash::Fold fold => { delimiter => '/' };
 
@@ -401,9 +418,9 @@ baked in e.g.:
 
 =head1 OPTIONS
 
-As described above, the following options can be supplied as constructor args, import args,
-or per-function overrides. Under the hood, they are (L<Moose>) attributes which can be wrapped
-and overridden like any other attributes.
+As described above, the following options can be supplied as constructor args,
+import args, or per-function overrides. Under the hood, they are (L<Moose>)
+attributes which can be wrapped and overridden like any other attributes.
 
 =head2 array_delimiter
 
@@ -421,16 +438,17 @@ The delimiter prefixed to hash elements when flattening and unflattening.
 
 B<Type>: Str
 
-This is effectively a write-only attribute which assigns the same string to L<"array_delimiter"> and
-L<"hash_delimiter">. It can only be supplied as a constructor arg or function option (which are
-equivalent) i.e. Hash::Fold instances have no C<delimiter> method.
+This is effectively a write-only attribute which assigns the same string to
+L<"array_delimiter"> and L<"hash_delimiter">. It can only be supplied as a
+constructor arg or function option (which are equivalent) i.e. Hash::Fold
+instances have no C<delimiter> method.
 
 =head2 on_cycle
 
 B<Type>: (Hash::Fold, Ref) -> None, ro
 
-A callback invoked whenever L<"fold"> encounters a circular reference i.e. a reference which contains
-itself as a nested value.
+A callback invoked whenever L<"fold"> encounters a circular reference i.e. a
+reference which contains itself as a nested value.
 
 The callback takes two arguments: the Hash::Fold instance and the value e.g.:
 
@@ -441,8 +459,9 @@ The callback takes two arguments: the Hash::Fold instance and the value e.g.:
 
     my $folder = Hash::Fold->new(on_cycle => \&on_cycle);
 
-Note that circular references are handled correctly i.e. they are treated as terminals and not traversed.
-This callback merely provides a mechanism to report them (e.g. by issuing a warning).
+Note that circular references are handled correctly i.e. they are treated as
+terminals and not traversed. This callback merely provides a mechanism to
+report them (e.g. by issuing a warning).
 
 The default callback does nothing.
 
@@ -450,10 +469,11 @@ The default callback does nothing.
 
 B<Type>: (Hash::Fold, Ref) -> Any, ro
 
-A callback invoked whenever L<"fold"> encounters a value for which the L<"is_object"> method returns true
-i.e. any reference that isn't an unblessed arrayref or unblessed hashref. This callback can be used to modify
-the value e.g. to return a traversable value (e.g. unblessed hashref) in place of a terminal (e.g.
-blessed hashref).
+A callback invoked whenever L<"fold"> encounters a value for which the
+L<"is_object"> method returns true i.e. any reference that isn't an unblessed
+arrayref or unblessed hashref. This callback can be used to modify
+the value e.g. to return a traversable value (e.g. unblessed hashref)
+in place of a terminal (e.g.  blessed hashref).
 
 The callback takes two arguments: the Hash::Fold instance and the object e.g.:
 
@@ -481,13 +501,14 @@ Nothing by default. The following functions can be imported.
 
 B<Signature>: (HashRef [, Hash|HashRef ]) -> HashRef
 
-Takes a nested hashref and returns a single-level hashref with (by default) dotted keys.
-The delimiter can be overridden via the L<"delimiter">, L<"array_delimiter"> and
-L<"hash_delimiter"> options.
+Takes a nested hashref and returns a single-level hashref with (by default)
+dotted keys. The delimiter can be overridden via the L<"delimiter">,
+L<"array_delimiter"> and L<"hash_delimiter"> options.
 
-Unblessed arrayrefs and unblessed hashrefs are traversed. All other values (e.g. strings,
-regexps, objects &c.) are treated as terminals and passed through verbatim,
-although this can be overridden by supplying a suitable L<"on_object"> callback.
+Unblessed arrayrefs and unblessed hashrefs are traversed. All other values
+(e.g. strings, regexps, objects &c.) are treated as terminals and passed
+through verbatim, although this can be overridden by supplying a suitable
+L<"on_object"> callback.
 
 =head2 flatten
 
@@ -513,13 +534,14 @@ B<Signature>: (HashRef [, HashRef... ]) -> HashRef
 
 B<Signature>: (ArrayRef[HashRef] [, Hash|HashRef ]) -> HashRef
 
-Takes a list of hashrefs which are then flattened, merged into one (in the order provided i.e.
-with precedence given to the rightmost arguments) and unflattened i.e. shorthand for:
+Takes a list of hashrefs which are then flattened, merged into one (in the
+order provided i.e.  with precedence given to the rightmost arguments) and
+unflattened i.e. shorthand for:
 
     unflatten { map { %{ flatten $_ } } @_ }
 
-To provide options to the C<merge> subroutine, pass the hashrefs in an arrayref, and the options
-(as usual) as a list of key/value pairs or a hashref:
+To provide options to the C<merge> subroutine, pass the hashrefs in an
+arrayref, and the options (as usual) as a list of key/value pairs or a hashref:
 
     merge([ $hash1, $hash2, ... ],   delimiter => ...  )
     merge([ $hash1, $hash2, ... ], { delimiter => ... })
@@ -530,11 +552,12 @@ To provide options to the C<merge> subroutine, pass the hashrefs in an arrayref,
 
 B<Signature>: Any -> Bool
 
-This method is called from L<"fold"> to determine whether a value should be passed to the L<"on_object">
-callback.
+This method is called from L<"fold"> to determine whether a value should be
+passed to the L<"on_object"> callback.
 
-It is passed each value encountered while traversing a hashref and returns true for all references (e.g.
-regexps, globs, objects &c.) apart from unblessed arrayrefs and unblessed hashrefs, and false for all other
+It is passed each value encountered while traversing a hashref and returns true
+for all references (e.g.  regexps, globs, objects &c.) apart from unblessed
+arrayrefs and unblessed hashrefs, and false for all other
 values (i.e. unblessed hashrefs, unblessed arrayrefs, and non-references).
 
 =head1 VERSION
@@ -563,7 +586,7 @@ chocolateboy <chocolate@cpan.org>
 
 Copyright (c) 2014, chocolateboy.
 
-This module is free software. It may be used, redistributed and/or modified under the same terms
-as Perl itself.
+This module is free software. It may be used, redistributed and/or modified
+under the same terms as Perl itself.
 
 =cut

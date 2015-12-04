@@ -6,7 +6,7 @@ use warnings;
 use Data::Dumper qw(Dumper);
 use Hash::Fold qw(merge);
 use Storable qw(dclone);
-use Test::More;
+use Test::More tests => 9;
 
 sub merge_ok {
     my ($args, $want) = @_;
@@ -89,5 +89,3 @@ sub merge_ok {
     merge_ok [ $got ], $want;
     isnt merge($got), $want; # different refs
 }
-
-done_testing;

@@ -1,9 +1,10 @@
 #!/usr/bin/env perl
+
 use strict;
 use warnings;
 
 use Hash::Fold qw(flatten unflatten fold unfold);
-use Test::More;
+use Test::More tests => 4;
 
 # Different hash and array delimiters
 {
@@ -56,5 +57,3 @@ use Test::More;
     my $roundtrip = unflatten($flattened, $delim);
     is_deeply $roundtrip, $nested;
 }
-
-done_testing;

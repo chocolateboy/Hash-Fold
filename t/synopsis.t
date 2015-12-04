@@ -54,5 +54,3 @@ use Test::More tests => 4;
 
     is_deeply $roundtrip, $nested;
 }
-
-done_testing;

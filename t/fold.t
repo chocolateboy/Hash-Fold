@@ -6,14 +6,18 @@ use warnings;
 use Data::Dumper qw(Dumper);
 use Hash::Fold qw(fold unfold);
 use Storable qw(dclone);
-use Test::More;
+use Test::More tests => 54;
 
 sub folds_ok {
     my $hash = shift;
     my $want = shift;
     my $options = @_ == 1 ? shift : { @_ };
 
-    local ($Data::Dumper::Terse, $Data::Dumper::Indent, $Data::Dumper::Sortkeys) = (1, 1, 1);
+    local (
+        $Data::Dumper::Terse,
+        $Data::Dumper::Indent,
+        $Data::Dumper::Sortkeys
+    ) = (1, 1, 1);
 
     # report errors with the caller's line number
     local $Test::Builder::Level = $Test::Builder::Level + 1;
@@ -24,15 +28,17 @@ sub folds_ok {
 
         unless (is_deeply($got, $want)) {
             warn 'got: ', Dumper($got), $/;
-            warn 'want: ', Dumper($got), $/;
+            warn 'want: ', Dumper($want), $/;
         }
 
         isnt $got, $want, 'different refs';
-        is_deeply unfold($got, $options), $hash, 'roundtrip: unfold(fold(hash)) == hash';
+
+        is_deeply unfold($got, $options),
+            $hash,
+            'roundtrip: unfold(fold(hash)) == hash';
     };
 
-    ok !$@, 'no exception raised'
-        or diag "Exception: $@";
+    ok !$@, 'no exception raised' or diag "Exception: $@";
 
     return $got;
 }
@@ -311,5 +317,3 @@ TODO: {
     local $TODO = "Array/hash ambiguity not resolved correctly at the moment";
     folds_ok $hash => $want;
 }
-
-done_testing;
