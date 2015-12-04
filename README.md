@@ -1,6 +1,6 @@
 # Hash::Fold
 
-[![CPAN version](https://badge.fury.io/pl/Hash_Fold.svg)](http://badge.fury.io/pl/Hash_Fold)
+[![CPAN version](https://badge.fury.io/pl/Hash-Fold.svg)](http://badge.fury.io/pl/Hash-Fold)
 [![build status](https://secure.travis-ci.org/chocolateboy/Hash-Fold.svg)](http://travis-ci.org/chocolateboy/Hash-Fold)
 
 flatten and unflatten nested hashrefs
