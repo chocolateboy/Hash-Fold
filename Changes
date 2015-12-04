@@ -3,7 +3,7 @@ Revision history for Hash-Fold
 0.1.2 Fri 4 Dec 04:47:18 2015
     - when deserializing, prefer the longest delimiter in the
       case where the array and hash delimiters share a common
-      prefix (thanks, tsibley)
+      prefix (thanks, Thomas Sibley)
 
 0.1.1 Tue May 13 06:34:27 2014
     - doc cleanup: separate types/signatures from POD headers
