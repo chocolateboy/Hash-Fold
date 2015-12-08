@@ -532,7 +532,7 @@ Provided as an alias for L<"unfold">.
 
 B<Signature>: (HashRef [, HashRef... ]) -> HashRef
 
-B<Signature>: (ArrayRef[HashRef] [, Hash|HashRef ]) -> HashRef
+B<Signature>: (ArrayRef<HashRef> [, Hash|HashRef ]) -> HashRef
 
 Takes a list of hashrefs which are then flattened, merged into one (in the
 order provided i.e.  with precedence given to the rightmost arguments) and
