@@ -233,7 +233,7 @@ sub _merge {
     # "localize" the $seen hash: we want to catch circular references (i.e.
     # an unblessed hashref or arrayref which contains (at some depth) a
     # reference to itself), but don't want to prevent repeated references
-    # e.g. { foo => $object, bar => $object } is OK. To achieve this, we need
+    # i.e. { foo => $object, bar => $object } is OK. To achieve this, we need
     # to "localize" the $seen hash i.e. do the equivalent of "local $seen".
     # However, perl doesn't allow lexical variables to be localized, so we have
     # to do it manually.

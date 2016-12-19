@@ -136,7 +136,7 @@ instances have no `delimiter` method.
 A callback invoked whenever [`fold`](#fold) encounters a circular reference i.e. a
 reference which contains itself as a nested value.
 
-The callback takes two arguments: the Hash::Fold instance and the value e.g.:
+The callback is passed two arguments: the Hash::Fold instance and the value e.g.:
 
 ```perl
 sub on_cycle {
@@ -163,7 +163,7 @@ arrayref or unblessed hashref. This callback can be used to modify
 the value e.g. to return a traversable value (e.g. unblessed hashref)
 in place of a terminal (e.g.  blessed hashref).
 
-The callback takes two arguments: the Hash::Fold instance and the object e.g.:
+The callback is passed two arguments: the Hash::Fold instance and the object e.g.:
 
 ```perl
 use Scalar::Util qw(blessed);
