@@ -149,7 +149,7 @@ sub folds_ok {
     is_deeply \@seen, [ $circular, $circular ];
 }
 
-# on_object: trigger the on_object type for a Regexp, a GLOB, and a blessed object
+# on_object: trigger the on_object callback for a Regexp, a GLOB, and a blessed object
 {
     my @on_object;
 
