@@ -450,7 +450,7 @@ B<Type>: (Hash::Fold, Ref) -> None, ro
 A callback invoked whenever L<"fold"> encounters a circular reference i.e. a
 reference which contains itself as a nested value.
 
-The callback takes two arguments: the Hash::Fold instance and the value e.g.:
+The callback is passed two arguments: the Hash::Fold instance and the value e.g.:
 
     sub on_cycle {
         my ($folder, $value) = @_;
@@ -475,7 +475,7 @@ arrayref or unblessed hashref. This callback can be used to modify
 the value e.g. to return a traversable value (e.g. unblessed hashref)
 in place of a terminal (e.g.  blessed hashref).
 
-The callback takes two arguments: the Hash::Fold instance and the object e.g.:
+The callback is passed two arguments: the Hash::Fold instance and the object e.g.:
 
     use Scalar::Util qw(blessed);
 
@@ -584,9 +584,9 @@ chocolateboy <chocolate@cpan.org>
 
 =head1 COPYRIGHT
 
-Copyright (c) 2014-2015, chocolateboy.
+Copyright (c) 2014-2015 by chocolateboy.
 
-This module is free software. It may be used, redistributed and/or modified
-under the same terms as Perl itself.
+This is free software; you can redistribute it and/or modify it under the
+terms of the Artistic License 2.0.
 
 =cut

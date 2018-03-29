@@ -1,13 +1,13 @@
 # Hash::Fold
 
-[![CPAN version](https://badge.fury.io/pl/Hash-Fold.svg)](http://badge.fury.io/pl/Hash-Fold)
-[![build status](https://secure.travis-ci.org/chocolateboy/Hash-Fold.svg)](http://travis-ci.org/chocolateboy/Hash-Fold)
-
-flatten and unflatten nested hashrefs
+[![Build Status](https://secure.travis-ci.org/chocolateboy/Hash-Fold.svg)](http://travis-ci.org/chocolateboy/Hash-Fold)
+[![CPAN Version](https://badge.fury.io/pl/Hash-Fold.svg)](http://badge.fury.io/pl/Hash-Fold)
+[![License](https://img.shields.io/badge/license-artistic-blue.svg)](https://github.com/chocolateboy/Hash-Fold/blob/master/LICENSE.md)
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 
+- [NAME](#name)
 - [SYNOPSIS](#synopsis)
 - [DESCRIPTION](#description)
 - [OPTIONS](#options)
@@ -31,7 +31,11 @@ flatten and unflatten nested hashrefs
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
-## SYNOPSIS
+# NAME
+
+Hash::Fold - flatten and unflatten nested hashrefs
+
+# SYNOPSIS
 
 ```perl
 use Hash::Fold qw(flatten unflatten);
@@ -61,7 +65,7 @@ my $roundtrip = unflatten($flattened);
 is_deeply $roundtrip, $nested;
 ```
 
-## DESCRIPTION
+# DESCRIPTION
 
 This module provides functional and OO interfaces which can be used to flatten,
 unflatten and merge nested hashrefs.
@@ -102,25 +106,25 @@ use Hash::Fold fold => { delimiter => '/' };
 my $folded = fold($hash);
 ```
 
-## OPTIONS
+# OPTIONS
 
 As described above, the following options can be supplied as constructor args,
 import args, or per-function overrides. Under the hood, they are ([Moose](https://metacpan.org/pod/Moose))
 attributes which can be wrapped and overridden like any other attributes.
 
-### array_delimiter
+## array_delimiter
 
 **Type**: Str, ro, default: "."
 
 The delimiter prefixed to array elements when flattening and unflattening.
 
-### hash_delimiter
+## hash_delimiter
 
 **Type**: Str, ro, default: "."
 
 The delimiter prefixed to hash elements when flattening and unflattening.
 
-### delimiter
+## delimiter
 
 **Type**: Str
 
@@ -129,7 +133,7 @@ This is effectively a write-only attribute which assigns the same string to
 constructor arg or function option (which are equivalent) i.e. Hash::Fold
 instances have no `delimiter` method.
 
-### on_cycle
+## on_cycle
 
 **Type**: (Hash::Fold, Ref) → None, ro
 
@@ -153,7 +157,7 @@ report them (e.g. by issuing a warning).
 
 The default callback does nothing.
 
-### on_object
+## on_object
 
 **Type**: (Hash::Fold, Ref) → Any, ro
 
@@ -183,11 +187,11 @@ my $folder = Hash::Fold->new(on_object => \&on_object);
 
 The default callback returns its value unchanged.
 
-## EXPORTS
+# EXPORTS
 
 Nothing by default. The following functions can be imported.
 
-### fold
+## fold
 
 **Signature**: (HashRef \[, Hash|HashRef \]) → HashRef
 
@@ -200,25 +204,25 @@ Unblessed arrayrefs and unblessed hashrefs are traversed. All other values
 through verbatim, although this can be overridden by supplying a suitable
 [`on_object`](#on_object) callback.
 
-### flatten
+## flatten
 
 **Signature**: (HashRef \[, Hash|HashRef \]) → HashRef
 
 Provided as an alias for [`fold`](#fold).
 
-### unfold
+## unfold
 
 **Signature**: (HashRef \[, Hash|HashRef \]) → HashRef
 
 Takes a flattened hashref and returns the corresponding nested hashref.
 
-### unflatten
+## unflatten
 
 **Signature**: (HashRef \[, Hash|HashRef \]) → HashRef
 
 Provided as an alias for [`unfold`](#unfold).
 
-### merge
+## merge
 
 **Signature**: (HashRef \[, HashRef... \]) → HashRef
 
@@ -240,9 +244,9 @@ merge([ $hash1, $hash2, ... ],   delimiter => ...  )
 merge([ $hash1, $hash2, ... ], { delimiter => ... })
 ```
 
-## METHODS
+# METHODS
 
-### is_object
+## is_object
 
 **Signature**: Any → Bool
 
@@ -254,24 +258,24 @@ for all references (e.g.  regexps, globs, objects &c.) apart from unblessed
 arrayrefs and unblessed hashrefs, and false for all other
 values (i.e. unblessed hashrefs, unblessed arrayrefs, and non-references).
 
-## VERSION
+# VERSION
 
 0.1.2
 
-## SEE ALSO
+# SEE ALSO
 
-- [CGI::Expand](https://metacpan.org/pod/CGI::Expand)
-- [Hash::Flatten](https://metacpan.org/pod/Hash::Flatten)
-- [Hash::Merge](https://metacpan.org/pod/Hash::Merge)
-- [Hash::Merge::Simple](https://metacpan.org/pod/Hash::Merge::Simple)
+* [CGI::Expand](https://metacpan.org/pod/CGI::Expand)
+* [Hash::Flatten](https://metacpan.org/pod/Hash::Flatten)
+* [Hash::Merge](https://metacpan.org/pod/Hash::Merge)
+* [Hash::Merge::Simple](https://metacpan.org/pod/Hash::Merge::Simple)
 
-## AUTHOR
+# AUTHOR
 
 [chocolateboy](mailto:chocolate@cpan.org)
 
-## COPYRIGHT
+# COPYRIGHT
 
-Copyright © 2014-2015, chocolateboy.
+Copyright © 2014-2015 by chocolateboy.
 
-This module is free software. It may be used, redistributed and/or modified
-under the same terms as Perl itself.
+This is free software; you can redistribute it and/or modify it under the
+terms of the [Artistic License 2.0](http://www.opensource.org/licenses/artistic-license-2.0.php).
