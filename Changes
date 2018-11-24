@@ -1,5 +1,9 @@
 Revision history for Hash-Fold
 
+0.1.3    
+
+    - Switch from Moose to Moo
+  
 0.1.2 Fri 4 Dec 04:47:18 2015
     - when deserializing, prefer the longest delimiter in the
       case where the array and hash delimiters share a common

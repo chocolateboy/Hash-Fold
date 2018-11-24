@@ -1,7 +1,7 @@
 package Hash::Fold;
 
 use Carp qw(confess);
-use Moose;
+use Moo;
 use Scalar::Util qw(refaddr);
 
 use Sub::Exporter -setup => {
@@ -20,26 +20,39 @@ use constant {
 
 our $VERSION = '0.1.2';
 
+my $CodeRef = sub {
+    my $attr = shift;
+    sub { die ("expected a 'CodeRef'." )
+	    unless 'CODE' eq ref $_[0]
+	}
+ };
+
+my $Str = sub {
+    my $attr = shift;
+    sub { die ("expected a 'Str'" )
+	    unless ref(\$_[0]) eq 'SCALAR' || ref(\(my $val = $_[0])) eq 'SCALAR' };
+};
+
 has on_object => (
-    isa      => 'CodeRef',
+    isa      => $CodeRef->('on_object'),
     is       => 'ro',
     default  => sub { sub { $_[1] } }, # return the value unchanged
 );
 
 has on_cycle => (
-    isa      => 'CodeRef',
+    isa      => $CodeRef->('on_cycle'),
     is       => 'ro',
     default  => sub { sub { } }, # do nothing
 );
 
 has hash_delimiter => (
-    isa      => 'Str',
+    isa      => $Str->('hash_delimiter'),
     is       => 'ro',
     default  => '.',
 );
 
 has array_delimiter => (
-    isa      => 'Str',
+    isa      => $Str->('array_delimiter'),
     is       => 'ro',
     default  => '.',
 );
@@ -419,7 +432,7 @@ imported with options baked in e.g.:
 =head1 OPTIONS
 
 As described above, the following options can be supplied as constructor args,
-import args, or per-function overrides. Under the hood, they are (L<Moose>)
+import args, or per-function overrides. Under the hood, they are (L<Moo>)
 attributes which can be wrapped and overridden like any other attributes.
 
 =head2 array_delimiter
