@@ -26,6 +26,7 @@ WriteMakefile(
     PREREQ_PM => {
         'Moo'         => 0,
         'Sub::Exporter' => 0,
+        'Types::Standard' => 0,
     },
     eumm_ge(6.48, { MIN_PERL_VERSION => '5.6.0' }),
     eumm_ge(6.31, { LICENSE => 'artistic_2' }),

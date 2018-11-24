@@ -3,6 +3,7 @@ package Hash::Fold;
 use Carp qw(confess);
 use Moo;
 use Scalar::Util qw(refaddr);
+use Types::Standard qw(Str CodeRef);
 
 use Sub::Exporter -setup => {
     exports => [
@@ -20,39 +21,26 @@ use constant {
 
 our $VERSION = '0.1.2';
 
-my $CodeRef = sub {
-    my $attr = shift;
-    sub { die ("expected a 'CodeRef'." )
-	    unless 'CODE' eq ref $_[0]
-	}
- };
-
-my $Str = sub {
-    my $attr = shift;
-    sub { die ("expected a 'Str'" )
-	    unless ref(\$_[0]) eq 'SCALAR' || ref(\(my $val = $_[0])) eq 'SCALAR' };
-};
-
 has on_object => (
-    isa      => $CodeRef->('on_object'),
+    isa      => CodeRef,
     is       => 'ro',
     default  => sub { sub { $_[1] } }, # return the value unchanged
 );
 
 has on_cycle => (
-    isa      => $CodeRef->('on_cycle'),
+    isa      => CodeRef,
     is       => 'ro',
     default  => sub { sub { } }, # do nothing
 );
 
 has hash_delimiter => (
-    isa      => $Str->('hash_delimiter'),
+    isa      => Str,
     is       => 'ro',
     default  => '.',
 );
 
 has array_delimiter => (
-    isa      => $Str->('array_delimiter'),
+    isa      => Str,
     is       => 'ro',
     default  => '.',
 );
