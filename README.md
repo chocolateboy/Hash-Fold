@@ -260,7 +260,7 @@ values (i.e. unblessed hashrefs, unblessed arrayrefs, and non-references).
 
 # VERSION
 
-0.1.2
+1.0.0
 
 # SEE ALSO
 
@@ -275,7 +275,7 @@ values (i.e. unblessed hashrefs, unblessed arrayrefs, and non-references).
 
 # COPYRIGHT
 
-Copyright © 2014-2015 by chocolateboy.
+Copyright © 2014-2018 by chocolateboy.
 
 This is free software; you can redistribute it and/or modify it under the
 terms of the [Artistic License 2.0](http://www.opensource.org/licenses/artistic-license-2.0.php).

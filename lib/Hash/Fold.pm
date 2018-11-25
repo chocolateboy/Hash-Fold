@@ -19,7 +19,9 @@ use constant {
     VALUE => 1,
 };
 
-our $VERSION = '0.1.2';
+# XXX this declaration must be on a single line
+# https://metacpan.org/pod/version#How-to-declare()-a-dotted-decimal-version
+use version 0.77; our $VERSION = version->declare('v1.0.0');
 
 has on_object => (
     isa      => CodeRef,
@@ -563,7 +565,7 @@ values (i.e. unblessed hashrefs, unblessed arrayrefs, and non-references).
 
 =head1 VERSION
 
-0.1.2
+1.0.0
 
 =head1 SEE ALSO
 
@@ -585,7 +587,7 @@ chocolateboy <chocolate@cpan.org>
 
 =head1 COPYRIGHT
 
-Copyright (c) 2014-2015 by chocolateboy.
+Copyright (c) 2014-2018 by chocolateboy.
 
 This is free software; you can redistribute it and/or modify it under the
 terms of the Artistic License 2.0.

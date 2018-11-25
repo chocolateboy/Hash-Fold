@@ -1,4 +1,4 @@
-Hash-Fold version 0.1.2
+Hash-Fold version 1.0.0
 ===========================
 
 This module provides functional and OO interfaces which can be used to flatten, unflatten and merge nested hashrefs.
@@ -18,10 +18,11 @@ This module requires these other modules and libraries:
 
     Moo
     Sub::Exporter
+    Types::Standard
 
 COPYRIGHT AND LICENCE
 
-Copyright (c) 2014-2015 by chocolateboy
+Copyright (c) 2014-2018 by chocolateboy
 
 This is free software; you can redistribute it and/or modify it under the
 terms of the Artistic License 2.0.
