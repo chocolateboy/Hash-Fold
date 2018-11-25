@@ -1,4 +1,4 @@
-use 5.008003; # perl >= 5.8.3 is required by Moose
+use 5.006000;
 use strict;
 use warnings;
 
@@ -24,10 +24,11 @@ WriteMakefile(
         'Test::More'    => 0,
     },
     PREREQ_PM => {
-        'Moose'         => 0,
+        'Moo'         => 0,
         'Sub::Exporter' => 0,
+        'Types::Standard' => 0,
     },
-    eumm_ge(6.48, { MIN_PERL_VERSION => '5.8.3' }),
+    eumm_ge(6.48, { MIN_PERL_VERSION => '5.6.0' }),
     eumm_ge(6.31, { LICENSE => 'artistic_2' }),
     eumm_ge(6.46, {
         META_MERGE => {

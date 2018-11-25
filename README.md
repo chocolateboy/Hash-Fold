@@ -109,7 +109,7 @@ my $folded = fold($hash);
 # OPTIONS
 
 As described above, the following options can be supplied as constructor args,
-import args, or per-function overrides. Under the hood, they are ([Moose](https://metacpan.org/pod/Moose))
+import args, or per-function overrides. Under the hood, they are ([Moo](https://metacpan.org/pod/Moo))
 attributes which can be wrapped and overridden like any other attributes.
 
 ## array_delimiter
