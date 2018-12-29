@@ -1,6 +1,5 @@
 package Hash::Fold;
 
-use Carp qw(confess);
 use Moo;
 use Scalar::Util qw(refaddr);
 use Types::Standard qw(Str CodeRef);
@@ -74,6 +73,23 @@ sub fold {
     return $self->_merge($hash, $prefix, $target, $seen);
 }
 
+sub _build_path {
+    my ( $self, $steps ) = @_;
+
+    my @path = map {
+        $_->[VALUE],
+          (
+              $_->[TYPE] == ARRAY ? $self->array_delimiter
+            : $_->[TYPE] == HASH  ? $self->hash_delimiter
+            :                       ''
+          )
+    } @$steps;
+    # last element is a delimiter; don't need that
+    pop @path;
+
+    return join '', @path;
+}
+
 sub unfold {
     my $self = shift;
     my $hash = _check_hash(shift);
@@ -85,7 +101,32 @@ sub unfold {
     for my $key (sort keys %$hash) {
         my $value = $hash->{$key};
         my $steps = $self->_split($key);
-        $self->_set($target, $steps, $value);
+
+        eval { $self->_set($target, $steps, $value) };
+        if ( $@ ) {
+            my $error   = $@;
+            my $o_steps = $self->_split($key);
+            # want everything that was removed from $steps
+            splice( @$o_steps, -1, @$steps + 1 );
+            my $context = $self->_build_path($o_steps);
+
+            my ( $article, $type )
+              = $error =~ /ARRAY/ ? qw[ an array ]
+              : $error =~ /HASH/  ? qw[ a hash ]
+              :                     ( undef, undef );
+
+            my $message
+              = defined $type
+              ? "Attempt to use non-${type} ($context) as ${article} ${type}"
+              : "unanticipated error: $error";
+
+            require Hash::Fold::Error;
+            Hash::Fold::Error->throw( {
+                message   => $message,
+                path      => $context,
+                type => $type
+            } );
+        }
     }
 
     return $target;
@@ -150,7 +191,11 @@ sub _check_hash {
             $type = 'undef';
         }
 
-        confess "invalid argument: expected unblessed HASH reference, got: $type";
+	require Hash::Fold::Error;
+	Hash::Fold::Error->throw({
+	    message => "invalid argument: expected unblessed HASH reference, got: $type",
+	    type => $type,
+	});
     }
 
     return $hash;
@@ -562,6 +607,33 @@ It is passed each value encountered while traversing a hashref and returns true
 for all references (e.g.  regexps, globs, objects &c.) apart from unblessed
 arrayrefs and unblessed hashrefs, and false for all other
 values (i.e. unblessed hashrefs, unblessed arrayrefs, and non-references).
+
+=head1 ERRORS
+
+Objects of the class L<Hash::Fold::Error> are thrown upon error.  The object
+stringifies to an error message with a strack trace.
+
+=over
+
+=item Invalid Argument
+
+If an input argument is not a hash, an error object will be thrown with the C<type>
+attribute set to the unexpected type of the argument.
+
+=item Incompatible path component
+
+If during an L</unfold>/L</unflatten> or a L</merge> incompatible
+types are found along the same paths in the structures, an error
+object will be thrown with the C<path> attribute set to the path with
+the incorrect type, and the C<type> attribute set to the unexpected
+type.  For example, the following paths would be incompatible:
+
+   foo.0 = 2
+   foo = 3
+
+as C<foo> cannot be both a scalar and an array.
+
+=back
 
 =head1 VERSION
 
