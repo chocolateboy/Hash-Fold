@@ -6,7 +6,8 @@ use warnings;
 use Data::Dumper qw(Dumper);
 use Hash::Fold qw(merge);
 use Storable qw(dclone);
-use Test::More tests => 9;
+use Test::More tests => 10;
+use Test::Fatal;
 
 sub merge_ok {
     my ($args, $want) = @_;
@@ -89,3 +90,60 @@ sub merge_ok {
     merge_ok [ $got ], $want;
     isnt merge($got), $want; # different refs
 }
+
+# nice error message if merging incompatible structures
+subtest 'incompatible structures' => sub {
+
+    # check single path component and multiple components separately
+    # to make sure there's no off-by-one error.
+
+    my $test = sub {
+        my ( $component, $hash1, $hash2, $hash3 ) = @_;
+        like(
+            exception { merge( $hash1, $hash2 ) },
+                  qr/attempt to use non-array \($component\) as an array/i, "array on scalar"
+        );
+
+        like(
+            exception { merge( $hash2, $hash1 ) },
+                  qr/attempt to use non-array \($component\) as an array/i, "scalar on array"
+        );
+
+        like(
+            exception { merge( $hash2, $hash3 ) },
+                  qr/attempt to use non-hash \($component\) as a hash/i, "hash on scalar"
+        );
+
+        like(
+            exception { merge( $hash3, $hash2 ) },
+                  qr/attempt to use non-hash \($component\) as a hash/i, "scalar on hash"
+        );
+
+        like(
+            exception { merge( $hash3, $hash1 ) },
+                  qr/attempt to use non-hash \($component\) as a hash/i, "hash on array"
+        );
+
+        like(
+            exception { merge( $hash1, $hash3 ) },
+                  qr/attempt to use non-hash \($component\) as a hash/i, "array on hash"
+        );
+    };
+
+    subtest "single path component" => $test, 'foo',
+        { foo => [ 'a', 'b', 'c' ], },
+        { foo => 3, },
+        { foo => { a => 1 } };
+
+
+    subtest "multiple path components, hash" => $test, 'foo.a',
+        { foo => { a => [ 'a', 'b', 'c' ] }, },
+        { foo => { a => 3 }, },
+        { foo => { a => { b => 1 } } };
+
+    subtest "multiple path components, array " => $test, 'foo.0',
+        { foo => [ [ 'a', 'b', 'c' ] ], },
+        { foo => [ 3 ], },
+        { foo => [ { b => 1 } ] };
+
+};

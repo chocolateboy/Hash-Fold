@@ -23,11 +23,13 @@ WriteMakefile(
     },
     BUILD_REQUIRES => {
         'Test::More' => 0,
+        'Test::Fatal' => 0,
     },
     PREREQ_PM             => {
         'Moo'             => 0,
         'Sub::Exporter'   => 0,
         'Types::Standard' => 0,
+        'Throwable::Error' => 0,
     },
     eumm_ge(6.48, { MIN_PERL_VERSION => '5.8.0' }),
     eumm_ge(6.31, { LICENSE => 'artistic_2' }),
