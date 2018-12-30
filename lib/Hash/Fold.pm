@@ -103,25 +103,28 @@ sub unfold {
         eval {$self->_set($target, $steps, $value)};
         if ($@) {
             my $error = $@;
+
             my $o_steps = $self->_split($key);
-            # want everything that was removed from $steps
-            splice(@$o_steps, -1, @$steps + 1);
-            my $context = $self->_build_path($o_steps);
+            my $context_type = $o_steps->[@$o_steps - @$steps - 1][TYPE];
 
             my ($article, $type)
-              = $error =~ /ARRAY/ ? qw[ an array ]
-              : $error =~ /HASH/  ? qw[ a hash ]
-              :                     (undef, undef);
+              = $context_type == ARRAY ? qw[ an array ]
+              : $context_type == HASH  ? qw[ a hash ]
+              :                             (undef, undef);
+
+            # want everything that was removed from $steps
+            splice(@$o_steps, -1, @$steps + 1);
+            my $path = $self->_build_path($o_steps);
 
             my $message
               = defined $type
-              ? "Attempt to use non-${type} ($context) as ${article} ${type}"
+              ? "Attempt to use non-${type} ($path) as ${article} ${type}"
               : "unanticipated error: $error";
 
             require Hash::Fold::Error;
             Hash::Fold::Error->throw({
                 message => $message,
-                path => $context,
+                path => $path,
                 type => $type
             });
         }
