@@ -74,15 +74,13 @@ sub fold {
 }
 
 sub _build_path {
-    my ( $self, $steps ) = @_;
+    my ($self, $steps) = @_;
 
     my @path = map {
         $_->[VALUE],
-          (
-              $_->[TYPE] == ARRAY ? $self->array_delimiter
-            : $_->[TYPE] == HASH  ? $self->hash_delimiter
-            :                       ''
-          )
+        $_->[TYPE] == ARRAY ? $self->array_delimiter
+        : $_->[TYPE] == HASH  ? $self->hash_delimiter
+        :                       ''
     } @$steps;
     # last element is a delimiter; don't need that
     pop @path;
@@ -102,18 +100,18 @@ sub unfold {
         my $value = $hash->{$key};
         my $steps = $self->_split($key);
 
-        eval { $self->_set($target, $steps, $value) };
-        if ( $@ ) {
-            my $error   = $@;
+        eval {$self->_set($target, $steps, $value)};
+        if ($@) {
+            my $error = $@;
             my $o_steps = $self->_split($key);
             # want everything that was removed from $steps
-            splice( @$o_steps, -1, @$steps + 1 );
+            splice(@$o_steps, -1, @$steps + 1);
             my $context = $self->_build_path($o_steps);
 
-            my ( $article, $type )
+            my ($article, $type)
               = $error =~ /ARRAY/ ? qw[ an array ]
               : $error =~ /HASH/  ? qw[ a hash ]
-              :                     ( undef, undef );
+              :                     (undef, undef);
 
             my $message
               = defined $type
@@ -121,11 +119,11 @@ sub unfold {
               : "unanticipated error: $error";
 
             require Hash::Fold::Error;
-            Hash::Fold::Error->throw( {
-                message   => $message,
-                path      => $context,
+            Hash::Fold::Error->throw({
+                message => $message,
+                path => $context,
                 type => $type
-            } );
+            });
         }
     }
 
