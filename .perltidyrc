@@ -1,0 +1,26 @@
+# copy some defaults from Mojolicious:
+# https://github.com/mojolicious/mojo/blob/v8.10/.perltidyrc
+
+-w    # Show all warnings
+-iob  # Ignore old breakpoints
+-l=80 # 80 characters per line
+-i=4  # Indentation is 4 columns
+
+# require a blank line before `if`, `while` etc. (default: true)
+--blanks-before-blocks
+
+# No more than 2 blank lines
+--maximum-consecutive-blank-lines=2
+
+# closing delimiters have the same indentation level as their
+# corresponding opening delimiter (default: 0)
+--closing-token-indentation=0
+
+# regular indent width (4 spaces) for split lines
+--continuation-indentation=4
+
+# standard `else` style
+--cuddled-else
+
+# no extraneous spaces inside parentheses
+--paren-tightness=2
