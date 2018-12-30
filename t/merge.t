@@ -98,34 +98,34 @@ subtest 'incompatible structures' => sub {
     # to make sure there's no off-by-one error.
 
     my $test = sub {
-        my ( $component, $hash1, $hash2, $hash3 ) = @_;
+        my ($component, $hash1, $hash2, $hash3) = @_;
         like(
-            exception { merge( $hash1, $hash2 ) },
+            exception { merge($hash1, $hash2) },
                   qr/attempt to use non-array \($component\) as an array/i, "array on scalar"
         );
 
         like(
-            exception { merge( $hash2, $hash1 ) },
+            exception { merge($hash2, $hash1) },
                   qr/attempt to use non-array \($component\) as an array/i, "scalar on array"
         );
 
         like(
-            exception { merge( $hash2, $hash3 ) },
+            exception { merge($hash2, $hash3) },
                   qr/attempt to use non-hash \($component\) as a hash/i, "hash on scalar"
         );
 
         like(
-            exception { merge( $hash3, $hash2 ) },
+            exception { merge($hash3, $hash2) },
                   qr/attempt to use non-hash \($component\) as a hash/i, "scalar on hash"
         );
 
         like(
-            exception { merge( $hash3, $hash1 ) },
+            exception { merge($hash3, $hash1) },
                   qr/attempt to use non-hash \($component\) as a hash/i, "hash on array"
         );
 
         like(
-            exception { merge( $hash1, $hash3 ) },
+            exception { merge($hash1, $hash3) },
                   qr/attempt to use non-hash \($component\) as a hash/i, "array on hash"
         );
     };

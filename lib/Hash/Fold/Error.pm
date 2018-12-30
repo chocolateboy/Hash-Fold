@@ -3,8 +3,13 @@ package Hash::Fold::Error;
 use Moo;
 extends 'Throwable::Error';
 
-has path => ( is => 'ro' );
-has type => ( is => 'ro' );
+has path => (
+    is => 'ro',
+);
+
+has type => (
+    is => 'ro',
+);
 
 1;
 
