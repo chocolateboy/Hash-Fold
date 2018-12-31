@@ -17,7 +17,7 @@ eval "use Pod::Coverage $min_pc";
 plan skip_all => "Pod::Coverage $min_pc required for testing POD coverage"
     if $@;
 
-# the constants (ARRAY, HASH &c.) are private
+# the constants (ARRAY, HASH etc.) are private
 my $params = { also_private => [ qr/^[A-Z]+$/ ] };
 
 all_pod_coverage_ok($params);

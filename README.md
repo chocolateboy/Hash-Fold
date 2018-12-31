@@ -200,7 +200,7 @@ dotted keys. The delimiter can be overridden via the [`delimiter`](#delimiter),
 [`array_delimiter`](#array_delimiter) and [`hash_delimiter`](#hash_delimiter) options.
 
 Unblessed arrayrefs and unblessed hashrefs are traversed. All other values
-(e.g. strings, regexps, objects &c.) are treated as terminals and passed
+(e.g. strings, regexps, objects etc.) are treated as terminals and passed
 through verbatim, although this can be overridden by supplying a suitable
 [`on_object`](#on_object) callback.
 
@@ -254,7 +254,7 @@ This method is called from [`fold`](#fold) to determine whether a value should b
 passed to the [`on_object`](#on_object) callback.
 
 It is passed each value encountered while traversing a hashref and returns true
-for all references (e.g.  regexps, globs, objects &c.) apart from unblessed
+for all references (e.g.  regexps, globs, objects etc.) apart from unblessed
 arrayrefs and unblessed hashrefs, and false for all other
 values (i.e. unblessed hashrefs, unblessed arrayrefs, and non-references).
 
