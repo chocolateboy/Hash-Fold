@@ -69,7 +69,7 @@ sub merge_ok {
     merge_ok [ $hash1, $hash2, $hash3 ], {
         foo  => 1,
         bar  => 3,
-        baz  => 5,
+        baz  => 4,
     };
 }
 
