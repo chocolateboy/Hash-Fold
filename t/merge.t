@@ -51,6 +51,28 @@ sub merge_ok {
     };
 }
 
+# empty hashes should be ignored
+{
+    my $hash1 = {
+        foo => 1,
+        bar => 2,
+    };
+
+    my $hash2 = {
+        bar  => 3,
+        baz  => 4,
+    };
+
+    my $hash3 = {
+    };
+
+    merge_ok [ $hash1, $hash2, $hash3 ], {
+        foo  => 1,
+        bar  => 3,
+        baz  => 4,
+    };
+}
+
 # where there are conflicts, confirm the rightmost array takes precedence
 # (also confirms more than 2 hashes can be merged)
 {
