@@ -396,8 +396,6 @@ sub _set {
     return @$steps ? $self->_set($context, $steps, $value) : $value;
 }
 
-__PACKAGE__->meta->make_immutable;
-
 1;
 
 =head1 NAME
