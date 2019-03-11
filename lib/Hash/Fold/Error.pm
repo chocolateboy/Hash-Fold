@@ -3,10 +3,6 @@ package Hash::Fold::Error;
 use Moo;
 extends 'Throwable::Error';
 
-# XXX this declaration must be on a single line
-# https://metacpan.org/pod/version#How-to-declare()-a-dotted-decimal-version
-use version 0.77; our $VERSION = version->declare('v1.0.0');
-
 has path => (
     is => 'ro',
 );
