@@ -271,11 +271,12 @@ values (i.e. unblessed hashrefs, unblessed arrayrefs, and non-references).
 
 # AUTHOR
 
-[chocolateboy](mailto:chocolate@cpan.org)
+- [chocolateboy](mailto:chocolate@cpan.org)
+- [djerius](mailto:djerius@cpan.org)
 
 # COPYRIGHT
 
-Copyright © 2014-2018 by chocolateboy.
+Copyright © 2014-2019 by chocolateboy.
 
 This is free software; you can redistribute it and/or modify it under the
 terms of the [Artistic License 2.0](http://www.opensource.org/licenses/artistic-license-2.0.php).

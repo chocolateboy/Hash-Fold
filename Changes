@@ -1,9 +1,10 @@
 Revision history for Hash-Fold
 
-1.0.0 TBD
+1.0.0 2019-03-11
 
     - bump minimum perl version from v5.6 to v5.8
     - switch from Moose to Moo (#2) (djerius)
+    - improve error reporting (#3) (djerius)
 
 0.1.2 2015-12-04
 
