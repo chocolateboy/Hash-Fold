@@ -659,7 +659,7 @@ type. For example, the following paths would be incompatible:
 
 =back
 
-=head1 AUTHOR
+=head1 AUTHORS
 
 =over
 

@@ -26,7 +26,7 @@
   - [is_object](#is_object)
 - [VERSION](#version)
 - [SEE ALSO](#see-also)
-- [AUTHOR](#author)
+- [AUTHORS](#authors)
 - [COPYRIGHT](#copyright)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
@@ -100,7 +100,7 @@ my $folded = fold($hash, { delimiter => '/' });
 In addition, Hash::Fold uses [Sub::Exporter](https://metacpan.org/pod/Sub::Exporter), which allows functions to be
 imported with options baked in e.g.:
 
-```
+```perl
 use Hash::Fold fold => { delimiter => '/' };
 
 my $folded = fold($hash);
@@ -269,7 +269,7 @@ values (i.e. unblessed hashrefs, unblessed arrayrefs, and non-references).
 * [Hash::Merge](https://metacpan.org/pod/Hash::Merge)
 * [Hash::Merge::Simple](https://metacpan.org/pod/Hash::Merge::Simple)
 
-# AUTHOR
+# AUTHORS
 
 - [chocolateboy](mailto:chocolate@cpan.org)
 - [djerius](mailto:djerius@cpan.org)
