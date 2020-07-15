@@ -1,11 +1,10 @@
 # Hash::Fold
 
-[![Build Status](https://secure.travis-ci.org/chocolateboy/Hash-Fold.svg)](http://travis-ci.org/chocolateboy/Hash-Fold)
-[![CPAN Version](https://badge.fury.io/pl/Hash-Fold.svg)](http://badge.fury.io/pl/Hash-Fold)
+[![Build Status](https://travis-ci.org/chocolateboy/Hash-Fold.svg)](https://travis-ci.org/chocolateboy/Hash-Fold)
+[![CPAN Version](https://badge.fury.io/pl/Hash-Fold.svg)](https://badge.fury.io/pl/Hash-Fold)
 [![License](https://img.shields.io/badge/license-artistic-blue.svg)](https://github.com/chocolateboy/Hash-Fold/blob/master/LICENSE.md)
 
-<!-- START doctoc generated TOC please keep comment here to allow auto update -->
-<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+<!-- toc -->
 
 - [NAME](#name)
 - [SYNOPSIS](#synopsis)
@@ -29,7 +28,7 @@
 - [AUTHORS](#authors)
 - [COPYRIGHT](#copyright)
 
-<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+<!-- tocstop -->
 
 # NAME
 
@@ -71,7 +70,7 @@ This module provides functional and OO interfaces which can be used to flatten,
 unflatten and merge nested hashrefs.
 
 Unless noted, the functions listed below are also available as methods. Options
-provided to the Hash::Fold constructor can be supplied to the functions e.g.:
+provided to the Hash::Fold constructor can be supplied to the functions, e.g.:
 
 ```perl
 use Hash::Fold;
@@ -97,8 +96,9 @@ my $folded = fold($hash,   delimiter => '/'  );
 my $folded = fold($hash, { delimiter => '/' });
 ```
 
-In addition, Hash::Fold uses [Sub::Exporter](https://metacpan.org/pod/Sub::Exporter), which allows functions to be
-imported with options baked in e.g.:
+In addition, Hash::Fold uses
+[Sub::Exporter](https://metacpan.org/pod/Sub::Exporter), which allows functions
+to be imported with options baked in, e.g.:
 
 ```perl
 use Hash::Fold fold => { delimiter => '/' };
@@ -109,8 +109,9 @@ my $folded = fold($hash);
 # OPTIONS
 
 As described above, the following options can be supplied as constructor args,
-import args, or per-function overrides. Under the hood, they are ([Moo](https://metacpan.org/pod/Moo))
-attributes which can be wrapped and overridden like any other attributes.
+import args, or per-function overrides. Under the hood, they are
+([Moo](https://metacpan.org/pod/Moo)) attributes which can be wrapped and
+overridden like any other attributes.
 
 ## array_delimiter
 
@@ -129,18 +130,18 @@ The delimiter prefixed to hash elements when flattening and unflattening.
 **Type**: Str
 
 This is effectively a write-only attribute which assigns the same string to
-[`array_delimiter`](#array_delimiter) and [`hash_delimiter`](#hash_delimiter). It can only be supplied as a
-constructor arg or function option (which are equivalent) i.e. Hash::Fold
-instances have no `delimiter` method.
+[`array_delimiter`](#array_delimiter) and [`hash_delimiter`](#hash_delimiter).
+It can only be supplied as a constructor arg or function option (which are
+equivalent) i.e. Hash::Fold instances have no `delimiter` method.
 
 ## on_cycle
 
 **Type**: (Hash::Fold, Ref) → None, ro
 
-A callback invoked whenever [`fold`](#fold) encounters a circular reference i.e. a
-reference which contains itself as a nested value.
+A callback invoked whenever [`fold`](#fold) encounters a circular reference
+i.e. a reference which contains itself as a nested value.
 
-The callback is passed two arguments: the Hash::Fold instance and the value e.g.:
+The callback is passed two arguments: the Hash::Fold instance and the value, e.g.:
 
 ```perl
 sub on_cycle {
@@ -162,12 +163,13 @@ The default callback does nothing.
 **Type**: (Hash::Fold, Ref) → Any, ro
 
 A callback invoked whenever [`fold`](#fold) encounters a value for which the
-[`is_object`](#is_object) method returns true i.e. any reference that isn't an unblessed
-arrayref or unblessed hashref. This callback can be used to modify
-the value e.g. to return a traversable value (e.g. unblessed hashref)
-in place of a terminal (e.g.  blessed hashref).
+[`is_object`](#is_object) method returns true i.e. any reference that isn't an
+unblessed arrayref or unblessed hashref. This callback can be used to modify
+the value, e.g. to return a traversable value (e.g. unblessed hashref) in place
+of a terminal (e.g. blessed hashref).
 
-The callback is passed two arguments: the Hash::Fold instance and the object e.g.:
+The callback is passed two arguments: the Hash::Fold instance and the object,
+e.g.:
 
 ```perl
 use Scalar::Util qw(blessed);
@@ -197,7 +199,8 @@ Nothing by default. The following functions can be imported.
 
 Takes a nested hashref and returns a single-level hashref with (by default)
 dotted keys. The delimiter can be overridden via the [`delimiter`](#delimiter),
-[`array_delimiter`](#array_delimiter) and [`hash_delimiter`](#hash_delimiter) options.
+[`array_delimiter`](#array_delimiter) and [`hash_delimiter`](#hash_delimiter)
+options.
 
 Unblessed arrayrefs and unblessed hashrefs are traversed. All other values
 (e.g. strings, regexps, objects etc.) are treated as terminals and passed
@@ -236,8 +239,8 @@ unflattened i.e. shorthand for:
 unflatten { map { %{ flatten $_ } } @_ }
 ```
 
-To provide options to the `merge` subroutine, pass the hashrefs in an
-arrayref, and the options (as usual) as a list of key/value pairs or a hashref:
+To provide options to the `merge` subroutine, pass the hashrefs in an arrayref,
+and the options (as usual) as a list of key/value pairs or a hashref:
 
 ```perl
 merge([ $hash1, $hash2, ... ],   delimiter => ...  )
@@ -250,13 +253,13 @@ merge([ $hash1, $hash2, ... ], { delimiter => ... })
 
 **Signature**: Any → Bool
 
-This method is called from [`fold`](#fold) to determine whether a value should be
-passed to the [`on_object`](#on_object) callback.
+This method is called from [`fold`](#fold) to determine whether a value should
+be passed to the [`on_object`](#on_object) callback.
 
 It is passed each value encountered while traversing a hashref and returns true
 for all references (e.g.  regexps, globs, objects etc.) apart from unblessed
-arrayrefs and unblessed hashrefs, and false for all other
-values (i.e. unblessed hashrefs, unblessed arrayrefs, and non-references).
+arrayrefs and unblessed hashrefs, and false for all other values (i.e.
+unblessed hashrefs, unblessed arrayrefs, and non-references).
 
 # VERSION
 
@@ -264,10 +267,10 @@ values (i.e. unblessed hashrefs, unblessed arrayrefs, and non-references).
 
 # SEE ALSO
 
-* [CGI::Expand](https://metacpan.org/pod/CGI::Expand)
-* [Hash::Flatten](https://metacpan.org/pod/Hash::Flatten)
-* [Hash::Merge](https://metacpan.org/pod/Hash::Merge)
-* [Hash::Merge::Simple](https://metacpan.org/pod/Hash::Merge::Simple)
+- [CGI::Expand](https://metacpan.org/pod/CGI::Expand)
+- [Hash::Flatten](https://metacpan.org/pod/Hash::Flatten)
+- [Hash::Merge](https://metacpan.org/pod/Hash::Merge)
+- [Hash::Merge::Simple](https://metacpan.org/pod/Hash::Merge::Simple)
 
 # AUTHORS
 
@@ -276,7 +279,7 @@ values (i.e. unblessed hashrefs, unblessed arrayrefs, and non-references).
 
 # COPYRIGHT
 
-Copyright © 2014-2019 by chocolateboy.
+Copyright © 2014-2020 by chocolateboy.
 
 This is free software; you can redistribute it and/or modify it under the
-terms of the [Artistic License 2.0](http://www.opensource.org/licenses/artistic-license-2.0.php).
+terms of the [Artistic License 2.0](https://www.opensource.org/licenses/artistic-license-2.0.php).
