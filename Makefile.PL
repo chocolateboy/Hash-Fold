@@ -22,14 +22,14 @@ WriteMakefile(
         'version'             => '0.77',
     },
     BUILD_REQUIRES => {
-        'Test::More' => 0,
-        'Test::Fatal' => 0,
+        'Test::More'  => '1.302183',
+        'Test::Fatal' => '0.016',
     },
-    PREREQ_PM             => {
-        'Moo'             => 0,
-        'Sub::Exporter'   => 0,
-        'Types::Standard' => 0,
-        'Throwable::Error' => 0,
+    PREREQ_PM              => {
+        'Moo'              => '2.004004',
+        'Sub::Exporter'    => '0.987',
+        'Types::Standard'  => '1.012001',
+        'Throwable::Error' => '0.200013',
     },
     eumm_ge(6.48, { MIN_PERL_VERSION => '5.8.0' }),
     eumm_ge(6.31, { LICENSE => 'artistic_2' }),

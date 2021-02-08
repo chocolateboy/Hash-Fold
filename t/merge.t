@@ -102,34 +102,41 @@ subtest 'incompatible structures' => sub {
 
     my $test = sub {
         my ($component, $array, $scalar, $hash) = @_;
+
         like(
             exception { merge($array, $scalar) },
-                qr/attempt to use non-array \($component\) as an array/i, 'array on scalar'
+            qr/attempt to use non-array \($component\) as an array/i,
+            'array on scalar'
         );
 
         like(
             exception { merge($scalar, $array) },
-                qr/attempt to use non-array \($component\) as an array/i, 'scalar on array'
+            qr/attempt to use non-array \($component\) as an array/i,
+            'scalar on array'
         );
 
         like(
             exception { merge($scalar, $hash) },
-                qr/attempt to use non-hash \($component\) as a hash/i, 'scalar on hash'
+            qr/attempt to use non-hash \($component\) as a hash/i,
+            'scalar on hash'
         );
 
         like(
             exception { merge($hash, $scalar) },
-                qr/attempt to use non-hash \($component\) as a hash/i, 'hash on scalar'
+            qr/attempt to use non-hash \($component\) as a hash/i,
+            'hash on scalar'
         );
 
         like(
             exception { merge($hash, $array) },
-                qr/attempt to use non-hash \($component\) as a hash/i, 'hash on array'
+            qr/attempt to use non-hash \($component\) as a hash/i,
+            'hash on array'
         );
 
         like(
             exception { merge($array, $hash) },
-                qr/attempt to use non-hash \($component\) as a hash/i, 'array on hash'
+            qr/attempt to use non-hash \($component\) as a hash/i,
+            'array on hash'
         );
     };
 
@@ -143,9 +150,8 @@ subtest 'incompatible structures' => sub {
         { foo => { a => 3 }, },
         { foo => { a => { b => 1 } } };
 
-    subtest 'multiple path components, array ' => $test, 'foo.0',
+    subtest 'multiple path components, array' => $test, 'foo.0',
         { foo => [ [ 'a', 'b', 'c' ] ], },
         { foo => [ 3 ], },
         { foo => [ { b => 1 } ] };
-
 };

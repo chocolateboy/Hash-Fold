@@ -18,6 +18,7 @@ This module requires these other modules and libraries:
 
     Moo
     Sub::Exporter
+    Throwable::Error
     Types::Standard
 
 COPYRIGHT AND LICENCE

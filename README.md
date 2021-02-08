@@ -1,8 +1,7 @@
 # Hash::Fold
 
-[![Build Status](https://travis-ci.org/chocolateboy/Hash-Fold.svg)](https://travis-ci.org/chocolateboy/Hash-Fold)
+[![Build Status](https://github.com/chocolateboy/Object-Extend/workflows/test/badge.svg)](https://github.com/chocolateboy/Object-Extend/actions?query=workflow%3Atest)
 [![CPAN Version](https://badge.fury.io/pl/Hash-Fold.svg)](https://badge.fury.io/pl/Hash-Fold)
-[![License](https://img.shields.io/badge/license-artistic-blue.svg)](https://github.com/chocolateboy/Hash-Fold/blob/master/LICENSE.md)
 
 <!-- TOC -->
 
