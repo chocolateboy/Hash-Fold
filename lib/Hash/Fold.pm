@@ -621,7 +621,7 @@ stringifies to an error message with a strack trace.
 
 =over
 
-=item Invalid Argument
+=item Invalid argument
 
 If an input argument is not a hash, an error object will be thrown with the C<type>
 attribute set to the unexpected type of the argument.
@@ -671,7 +671,7 @@ type. For example, the following paths would be incompatible:
 
 =head1 COPYRIGHT
 
-Copyright (c) 2014-2020 by chocolateboy.
+Copyright (c) 2014-2021 by chocolateboy.
 
 This is free software; you can redistribute it and/or modify it under the
 terms of the Artistic License 2.0.

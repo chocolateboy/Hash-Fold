@@ -4,7 +4,7 @@
 [![CPAN Version](https://badge.fury.io/pl/Hash-Fold.svg)](https://badge.fury.io/pl/Hash-Fold)
 [![License](https://img.shields.io/badge/license-artistic-blue.svg)](https://github.com/chocolateboy/Hash-Fold/blob/master/LICENSE.md)
 
-<!-- toc -->
+<!-- TOC -->
 
 - [NAME](#name)
 - [SYNOPSIS](#synopsis)
@@ -28,7 +28,7 @@
 - [AUTHORS](#authors)
 - [COPYRIGHT](#copyright)
 
-<!-- tocstop -->
+<!-- TOC END -->
 
 # NAME
 
@@ -279,7 +279,7 @@ unblessed hashrefs, unblessed arrayrefs, and non-references).
 
 # COPYRIGHT
 
-Copyright © 2014-2020 by chocolateboy.
+Copyright © 2014-2021 by chocolateboy.
 
 This is free software; you can redistribute it and/or modify it under the
 terms of the [Artistic License 2.0](https://www.opensource.org/licenses/artistic-license-2.0.php).
